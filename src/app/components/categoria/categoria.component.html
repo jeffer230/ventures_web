@@ -1,0 +1,122 @@
+<div class="container">
+  <section>
+      <h2>Tabla Categorías</h2>
+
+      <!-- Botón para abrir el modal de crear/editar -->
+      <button
+        class="btn btn-primary mb-3"
+        (click)="openModal()">
+        Crear Categoría
+      </button>
+
+      <!-- Indicador de carga -->
+      <div *ngIf="isLoading" class="text-center my-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <!-- Tabla de categorías -->
+      <div class="table-responsive" *ngIf="!isLoading">
+        <table class="table table-striped table-hover">
+          <caption>
+            Tabla Categorías
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Descripcion</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let category of categorias">
+              <th scope="row">{{category.id}}</th>
+              <td>{{category.nombre}}</td>
+              <td>{{category.descripcion}}</td>
+              <td>
+                <button type="button"
+                        class="btn btn-warning me-3"
+                        (click)="openModal(category)">
+                  Editar
+                </button>
+                <button type="button"
+                        class="btn btn-danger"
+                        (click)="deleteCategoria(category.id)">
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mensaje si no hay datos -->
+      <div *ngIf="!isLoading && categorias.length === 0" class="text-center">
+        <p>No se encontraron categorías.</p>
+      </div>
+
+
+      <!-- Modal para crear/editar categoría -->
+      <div *ngIf="isModalOpen" class="modal-backdrop">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">
+                {{ modalEditar ? 'Editar Categoría' : 'Crear Categoría' }}
+              </h5>
+              <button type="button" class="btn-close ms-3" aria-label="Close" (click)="closeModal()"></button>
+            </div>
+            <form #form="ngForm" (ngSubmit)="modalEditar ? editarCategoria(form) : crearCategoria(form)" novalidate>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="nombre" class="form-label">
+                    Nombre
+                  </label>
+                  <input type="text"
+                      id="nombre"
+                      class="form-control"
+                      name="nombre"
+                      [(ngModel)]="selectedCategory.nombre"
+                      required
+                      maxlength="50"
+                      name="nombre"
+                      #nombre="ngModel"/>
+                      <div *ngIf="nombre.invalid  && (nombre.dirty || nombre.touched)" class="text-danger">
+                          <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio</small>
+                          <small *ngIf="nombre.errors?.['maxlength']">El nombre debe tener menos de 50 caracteres</small>
+                      </div>
+                </div>
+                <div class="mb-3">
+                  <label for="descripcion" class="form-label">Descripción</label>
+                  <input type="text"
+                    id="descripcion"
+                    class="form-control"
+                    name="descripcion"
+                    [(ngModel)]="selectedCategory.descripcion"
+                    required
+                    maxlength="255"
+                    #descripcion="ngModel"/>
+                    <div *ngIf="descripcion.invalid  && (descripcion.dirty || descripcion.touched)" class="text-danger">
+                      <small *ngIf="descripcion.errors?.['required']">El descripcion es obligatorio</small>
+                      <small *ngIf="descripcion.errors?.['maxlength']">El descripcion debe tener menos de 255 caracteres</small>
+                    </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary me-3" (click)="closeModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">
+                  {{ modalEditar ? 'Guardar Cambios' : 'Crear Categoría' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+  </section>
+</div>
+
+
+
