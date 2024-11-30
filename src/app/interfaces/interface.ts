@@ -17,3 +17,13 @@ export interface Category{
     descripcion: string,
 }
 
+export interface Event{
+    id: number,
+    nombre: string,
+    fecha:string,
+    id_municipio: number | undefined,
+    direccion: string,
+    descripcion: string,
+}
+
+

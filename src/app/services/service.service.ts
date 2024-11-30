@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Category,User } from '../interfaces/interface';
+import { Category,User,Event } from '../interfaces/interface';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -19,6 +19,21 @@ export class ServiceService {
   // Emprendimientos *****************************
 
   // Eventos ************************************
+  consultarEventos(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${this.url}evento`);
+  }
+
+  crearEvento(evento: Event): Observable<Event> {
+    return this.http.post<Event>(`${this.url}evento`, evento);
+  }
+
+  editarEvento(evento: Event): Observable<Event> {
+    return this.http.put<Event>(`${this.url}evento/${evento.id}`, evento);
+  }
+
+  borrarEvento(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}evento/${id}`);
+  }
 
 
   // Categorias **********************************
