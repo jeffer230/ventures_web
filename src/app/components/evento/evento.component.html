@@ -34,7 +34,7 @@
             <td>{{ evento.id }}</td>
             <td>{{ evento.nombre }}</td>
             <td>{{ evento.fecha | date: 'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ evento.municipio?.nombre || 'Sin Municipio' }}</td>
+            <td>{{ evento.municipio?.nombre || 'N/A' }}</td>
              <td>{{ evento.direccion }}</td>
             <td>{{ evento.descripcion }}</td>
             <td>

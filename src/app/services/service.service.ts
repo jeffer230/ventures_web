@@ -14,6 +14,22 @@ export class ServiceService {
   constructor(private http: HttpClient) { }
 
   // Usuarios ************************************
+  consultarUsuarios(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.url}usuarios`);
+  }
+
+  crearUsuario(usuario: User): Observable<User> {
+    return this.http.post<User>(`${this.url}usuarios`, usuario);
+  }
+
+  editarUsuario(usuario: User): Observable<User> {
+    return this.http.put<User>(`${this.url}usuarios/${usuario.id}`, usuario);
+  }
+
+  borrarUsuario(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}usuarios/${id}`);
+  }
+
 
   // Emprendimientos *****************************
   consultarEmprendimientos(): Observable<Venture[]> {
@@ -32,6 +48,7 @@ export class ServiceService {
     return this.http.delete<void>(`${this.url}emprendimiento/${id}`);
   }
 
+
   // Eventos ************************************
   consultarEventos(): Observable<Event[]> {
     return this.http.get<Event[]>(`${this.url}evento`);
@@ -49,26 +66,24 @@ export class ServiceService {
     return this.http.delete<void>(`${this.url}evento/${id}`);
   }
 
+
   // Categorias **********************************
-  // consulta la lista de todas las categorías
   consultarCategorias(): Observable<Category[]> {
     return this.http.get<Category[]>(`${this.url}categorias`);
   }
 
-  // crear una categoria
   crearCategoria(categoria: Category):Observable<Category>{
     return this.http.post<Category>(`${this.url}categorias`, categoria)
   }
 
-  // editar una categoria
   editarCategoria(categoria: Category): Observable<Category> {
     return this.http.put<Category>(`${this.url}categorias/${categoria.id}`, categoria);
   }
 
-  // Eliminar una categoria
   borrarCategoria(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}categorias/${id}`);
   }
+
 
   // Municipios **********************************
   consultarMunicipios(): Observable<municipality[]> {
@@ -79,10 +94,12 @@ export class ServiceService {
     return this.http.get<municipality[]>(`${this.url}municipios/departamento/${id}`);
   }
 
+
   // Departamentos **********************************
   consultarDepartamentos(): Observable<department[]> {
     return this.http.get<department[]>(`${this.url}departamentos`);
   }
+
 
   // Roles **********************************
   consultarRoles(): Observable<rol[]> {

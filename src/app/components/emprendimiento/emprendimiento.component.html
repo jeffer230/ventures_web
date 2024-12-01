@@ -33,8 +33,8 @@
             <td>{{ emp.id }}</td>
             <td>{{ emp.codigo }}</td>
             <td>{{ emp.nombre }}</td>
-            <td>{{ emp.municipio?.nombre || 'Sin Municipio'}}</td>
-            <td>{{ emp.categoria?.nombre || 'Sin Categoría' }}</td>
+            <td>{{ emp.municipio?.nombre || 'N/A'}}</td>
+            <td>{{ emp.categoria?.nombre || 'N/A' }}</td>
             <td>
               <button type="button" class="btn btn-warning me-3" (click)="openModal(emp)">Editar</button>
               <button type="button" class="btn btn-danger" (click)="deleteEmprendimiento(emp.id)">Eliminar</button>
