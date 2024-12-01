@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Category,User,Event } from '../interfaces/interface';
+import { Category,User,Event,Venture,municipality,department,rol } from '../interfaces/interface';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +16,21 @@ export class ServiceService {
   // Usuarios ************************************
 
   // Emprendimientos *****************************
+  consultarEmprendimientos(): Observable<Venture[]> {
+    return this.http.get<Venture[]>(`${this.url}emprendimiento`);
+  }
+
+  crearEmprendimiento(emprendimiento: Venture): Observable<Venture> {
+    return this.http.post<Venture>(`${this.url}emprendimiento`, emprendimiento);
+  }
+
+  editarEmprendimiento(emprendimiento: Venture): Observable<Venture> {
+    return this.http.put<Venture>(`${this.url}emprendimiento/${emprendimiento.id}`, emprendimiento);
+  }
+
+  borrarEmprendimiento(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}emprendimiento/${id}`);
+  }
 
   // Eventos ************************************
   consultarEventos(): Observable<Event[]> {
@@ -34,7 +48,6 @@ export class ServiceService {
   borrarEvento(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}evento/${id}`);
   }
-
 
   // Categorias **********************************
   // consulta la lista de todas las categorías
@@ -57,8 +70,23 @@ export class ServiceService {
     return this.http.delete<void>(`${this.url}categorias/${id}`);
   }
 
+  // Municipios **********************************
+  consultarMunicipios(): Observable<municipality[]> {
+    return this.http.get<municipality[]>(`${this.url}municipios`);
+  }
 
+  consultarMunicipiosByDepartamento(id: number): Observable<municipality[]> {
+    return this.http.get<municipality[]>(`${this.url}municipios/departamento/${id}`);
+  }
 
+  // Departamentos **********************************
+  consultarDepartamentos(): Observable<department[]> {
+    return this.http.get<department[]>(`${this.url}departamentos`);
+  }
 
+  // Roles **********************************
+  consultarRoles(): Observable<rol[]> {
+    return this.http.get<rol[]>(`${this.url}roles`);
+  }
 
 }

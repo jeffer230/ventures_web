@@ -1,1 +1,150 @@
-<p>emprendimiento works!</p>
+<div class="container">
+  <section>
+    <h2>Tabla Emprendimientos</h2>
+
+    <!-- Botón para abrir el modal de crear/editar -->
+    <button class="btn btn-primary mb-3" (click)="openModal()">
+      Crear Emprendimiento
+    </button>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="isLoading" class="text-center my-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <!-- Tabla de emprendimientos -->
+    <div class="table-responsive" *ngIf="!isLoading">
+      <table class="table table-striped table-hover">
+        <caption>Tabla Emprendimientos</caption>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Municipio</th>
+            <th>Categoría</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of emprendimientos">
+            <td>{{ emp.id }}</td>
+            <td>{{ emp.codigo }}</td>
+            <td>{{ emp.nombre }}</td>
+            <td>{{ emp.municipio?.nombre || 'Sin Municipio'}}</td>
+            <td>{{ emp.categoria?.nombre || 'Sin Categoría' }}</td>
+            <td>
+              <button type="button" class="btn btn-warning me-3" (click)="openModal(emp)">Editar</button>
+              <button type="button" class="btn btn-danger" (click)="deleteEmprendimiento(emp.id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mensaje si no hay datos -->
+    <div *ngIf="!isLoading && emprendimientos.length === 0" class="text-center">
+      <p>No se encontraron emprendimientos.</p>
+    </div>
+
+    <!-- Modal para crear/editar emprendimientos -->
+    <div *ngIf="isModalOpen" class="modal-backdrop">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ modalEditar ? 'Editar Emprendimiento' : 'Crear Emprendimiento' }}</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+          </div>
+
+          <form #form="ngForm" (ngSubmit)="modalEditar ? editarEmprendimiento(form) : crearEmprendimiento(form)" novalidate>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="codigo" class="form-label">
+                  Código
+                </label>
+                <input type="text"
+                      id="codigo"
+                      class="form-control"
+                      [(ngModel)]="selectedEmprendimiento.codigo"
+                      name="codigo"
+                      required
+                      #codigo="ngModel"/>
+              </div>
+
+              <div class="mb-3">
+                <label for="nombre" class="form-label">
+                  Nombre
+                </label>
+                <input type="text"
+                      id="nombre"
+                      class="form-control"
+                      [(ngModel)]="selectedEmprendimiento.nombre"
+                      name="nombre"
+                      required
+                      #nombre="ngModel"/>
+                  <div *ngIf="nombre.invalid  && (nombre.dirty || nombre.touched)" class="text-danger">
+                      <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio</small>
+                  </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="id_municipio" class="form-label">
+                  Municipio
+                </label>
+                <select id="id_municipio"
+                  class="form-select"
+                  [(ngModel)]="selectedEmprendimiento.id_municipio"
+                  name="id_municipio"
+                  required
+                  #id_municipio="ngModel">
+                  <option [ngValue]="null" disabled selected>Seleccione un municipio</option>
+                  <option *ngFor="let municipio of municipios" [value]="municipio.id">
+                    {{ municipio.nombre }}
+                  </option>
+                </select>
+                <div *ngIf="id_municipio.invalid && (id_municipio.dirty || id_municipio.touched)" class="text-danger">
+                  <small *ngIf="id_municipio.errors?.['required']">El municipio es obligatorio</small>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="id_categoria" class="form-label">
+                  Categoría
+                </label>
+                <select id="id_categoria"
+                  class="form-select"
+                  [(ngModel)]="selectedEmprendimiento.id_categoria"
+                  name="id_categoria"
+                  required
+                  #id_categoria="ngModel">
+                  <option [ngValue]="null" disabled selected>Seleccione una categoría</option>
+                  <option *ngFor="let cat of categorias" [value]="cat.id">
+                    {{ cat.nombre }}
+                  </option>
+                </select>
+                <div *ngIf="id_categoria.invalid && (id_categoria.dirty || id_categoria.touched)" class="text-danger">
+                  <small *ngIf="id_categoria.errors?.['required']">La categoría es obligatoria</small>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button"
+                    class="btn btn-secondary"
+                    (click)="closeModal()">
+                    Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                {{ modalEditar ? 'Guardar Cambios' : 'Crear Emprendimiento' }}
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
