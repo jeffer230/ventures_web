@@ -3,7 +3,9 @@
     <h2>Tabla Eventos</h2>
 
     <!-- Botón para abrir el modal de crear/editar -->
-    <button class="btn btn-primary mb-3" (click)="openModal()">Crear Evento</button>
+    <button class="btn btn-primary mb-3" (click)="openModal()">
+      Crear Evento
+    </button>
 
     <!-- Indicador de carga -->
     <div *ngIf="isLoading" class="text-center my-3">
@@ -22,7 +24,7 @@
             <th>Nombre</th>
             <th>Fecha</th>
             <th>Municipio</th>
-            <th>Direccion</th>
+            <th>Dirección</th>
             <th>Descripción</th>
             <th>Acciones</th>
           </tr>
@@ -31,13 +33,17 @@
           <tr *ngFor="let evento of eventos">
             <td>{{ evento.id }}</td>
             <td>{{ evento.nombre }}</td>
-            <td>{{ evento.fecha }}</td>
-            <td>{{ evento.id_municipio }}</td>
+            <td>{{ evento.fecha | date: 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ evento.municipio?.nombre || 'N/A' }}</td>
              <td>{{ evento.direccion }}</td>
             <td>{{ evento.descripcion }}</td>
             <td>
-              <button type="button" class="btn btn-warning me-3" (click)="openModal(evento)">Editar</button>
-              <button type="button" class="btn btn-danger" (click)="deleteEvento(evento.id)">Eliminar</button>
+              <button type="button" class="btn btn-warning me-3" (click)="openModal(evento)">
+                Editar
+              </button>
+              <button type="button" class="btn btn-danger" (click)="borrarEvento(evento.id)">
+                Eliminar
+              </button>
             </td>
           </tr>
         </tbody>
@@ -59,28 +65,105 @@
           </div>
           <form #form="ngForm" (ngSubmit)="modalEditar ? editarEvento(form) : crearEvento(form)" novalidate>
             <div class="modal-body">
+
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" id="nombre" class="form-control" name="nombre" [(ngModel)]="selectedEvento.nombre" required />
+                <input type="text"
+                    id="nombre"
+                    class="form-control"
+                    name="nombre"
+                    [(ngModel)]="selectedEvento.nombre"
+                    required
+                    maxlength="255"
+                    #nombre="ngModel"/>
+                  <div *ngIf="nombre.invalid  && (nombre.dirty || nombre.touched)" class="text-danger">
+                      <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio</small>
+                      <small *ngIf="nombre.errors?.['maxlength']">El nombre debe tener menos de 255 caracteres</small>
+                  </div>
               </div>
+
               <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text" id="descripcion" class="form-control" name="descripcion" [(ngModel)]="selectedEvento.descripcion" required />
+                <label for="fecha" class="form-label">
+                  Fecha
+                </label>
+                <input type="datetime-local"
+                      id="fecha"
+                      class="form-control"
+                      name="fecha"
+                      [(ngModel)]="selectedEvento.fecha"
+                      required
+                      #fecha="ngModel"/>
+                  <div *ngIf="fecha.invalid && (fecha.dirty || fecha.touched)" class="text-danger">
+                    <small *ngIf="fecha.errors?.['required']">La fecha y hora son obligatorias</small>
+                  </div>
               </div>
+
               <div class="mb-3">
-                <label for="fecha" class="form-label">Fecha</label>
-                <input type="date" id="fecha" class="form-control" name="fecha" [(ngModel)]="selectedEvento.fecha" required />
+                <label for="id_municipio" class="form-label">
+                  Municipio
+                </label>
+                <select id="id_municipio"
+                  class="form-select"
+                  [(ngModel)]="selectedEvento.id_municipio"
+                  name="id_municipio"
+                  required
+                  #id_municipio="ngModel">
+                  <option [ngValue]="null" disabled selected>Seleccione un municipio</option>
+                  <option *ngFor="let municipio of municipios" [value]="municipio.id">
+                    {{ municipio.nombre }}
+                  </option>
+                </select>
+                <div *ngIf="id_municipio.invalid && (id_municipio.dirty || id_municipio.touched)" class="text-danger">
+                  <small *ngIf="id_municipio.errors?.['required']">El municipio es obligatorio</small>
+                </div>
               </div>
+
               <div class="mb-3">
-                <label for="ubicacion" class="form-label">Ubicación</label>
-                <input type="text" id="ubicacion" class="form-control" name="ubicacion" [(ngModel)]="selectedEvento.direccion" required />
+                <label for="direccion" class="form-label">
+                  Dirección
+                </label>
+                <input type="text"
+                      id="direccion"
+                      class="form-control"
+                      name="direccion"
+                      [(ngModel)]="selectedEvento.direccion"
+                      required
+                      #direccion="ngModel"/>
+                    <div *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)" class="text-danger">
+                      <small *ngIf="direccion.errors?.['required']">la direccion es obligatoria</small>
+                    </div>
               </div>
+
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">
+                  Descripción
+                </label>
+                <input type="text"
+                      id="descripcion"
+                      class="form-control"
+                      name="descripcion"
+                      [(ngModel)]="selectedEvento.descripcion"
+                      required
+                      #descripcion="ngModel"/>
+                    <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="text-danger">
+                      <small *ngIf="descripcion.errors?.['required']">La descripcion es obligatoria</small>
+                    </div>
+              </div>
+
             </div>
+
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
-              <button type="submit" class="btn btn-primary">{{ modalEditar ? 'Guardar Cambios' : 'Crear Evento' }}</button>
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                Cancelar
+              </button>
+
+              <button type="submit" class="btn btn-primary">
+                {{ modalEditar ? 'Guardar Cambios' : 'Crear Evento' }}
+              </button>
             </div>
+
           </form>
+
         </div>
       </div>
     </div>
