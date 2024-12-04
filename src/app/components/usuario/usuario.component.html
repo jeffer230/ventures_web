@@ -54,10 +54,20 @@
               <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
             </div>
             <div class="modal-body">
+
               <div class="mb-3">
-                <label for="cedula" class="form-label">Cédula</label>
-                <input id="cedula" class="form-control" [(ngModel)]="selectedUsuario.cedula" name="cedula" required />
+                <label for="cedula" class="form-label">
+                  Cédula
+                </label>
+                <input type="number"
+                      id="cedula"
+                      class="form-control"
+                      name="cedula"
+                      [(ngModel)]="selectedUsuario.cedula"
+                      required
+                      #cedula="ngModel"/>
               </div>
+
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input id="nombre" class="form-control" [(ngModel)]="selectedUsuario.nombre" name="nombre" required />
@@ -74,13 +84,23 @@
                 <label for="email" class="form-label">Email</label>
                 <input id="email" class="form-control" [(ngModel)]="selectedUsuario.email" name="email" required />
               </div>
+
               <div class="mb-3">
-                <label for="id_municipio" class="form-label">Municipio</label>
-                <select id="id_municipio" class="form-select" [(ngModel)]="selectedUsuario.id_municipio" name="id_municipio" required>
+                <label for="id_municipio" class="form-label">
+                  Municipio
+                </label>
+                <select id="id_municipio"
+                        class="form-select"
+                        name="id_municipio"
+                        [(ngModel)]="selectedUsuario.id_municipio"
+                        required>
                   <option [ngValue]="null" disabled selected>Seleccione un municipio</option>
-                  <option *ngFor="let municipio of municipios" [value]="municipio.id">{{ municipio.nombre }}</option>
+                  <option *ngFor="let municipio of municipios" [value]="municipio.id">
+                    {{ municipio.nombre }}
+                  </option>
                 </select>
               </div>
+
               <div class="mb-3">
                 <label for="id_rol" class="form-label">Rol</label>
                 <select id="id_rol" class="form-select" [(ngModel)]="selectedUsuario.id_rol" name="id_rol" required>
@@ -88,11 +108,34 @@
                   <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombre }}</option>
                 </select>
               </div>
+
+              <div class="mb-3" *ngIf="!modalEditar">
+                <label for="password" class="form-label">
+                  Contraseña
+                </label>
+                <input type="password"
+                    id="password"
+                    class="form-control"
+                    [(ngModel)]="selectedUsuario.password"
+                    name="password"
+                    required
+                    minlength="6"
+                    #password="ngModel"/>
+                <div *ngIf="form.submitted && !selectedUsuario.password" class="text-danger">
+                  <small>La contraseña es obligatoria.</small>
+                </div>
+                <div *ngIf="form.submitted && password.errors?.['minlength']" class="text-danger">
+                  <small>La contraseña debe tener al menos 6 caracteres.</small>
+                </div>
+              </div>
+
             </div>
+
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
               <button type="submit" class="btn btn-primary">{{ modalEditar ? 'Guardar Cambios' : 'Crear Usuario' }}</button>
             </div>
+
           </form>
         </div>
       </div>

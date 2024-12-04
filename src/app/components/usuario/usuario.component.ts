@@ -75,11 +75,13 @@ export class UsuarioComponent implements OnInit{
   // Crear un nuevo usuario
   crearUsuario(form: NgForm): void {
     if (form.valid) {
+      console.log(this.selectedUsuario);
       this.userService.crearUsuario(this.selectedUsuario).subscribe({
         next: (nuevoUsuario) => {
           this.usuarios.push(nuevoUsuario);
           form.resetForm();
           this.closeModal();
+          console.log('Usuario creado exitosamente:', nuevoUsuario);
           this.swal.success('Éxito', 'Usuario creado con éxito');
         },
         error: (err) => {

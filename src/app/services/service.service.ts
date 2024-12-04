@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Category,User,Event,Venture,municipality,department,rol } from '../interfaces/interface';
+import { Category,User,Event,Venture,municipality,department,rol,UsuarioEmprendimiento,EmprendimientoEvento } from '../interfaces/interface';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -36,6 +36,10 @@ export class ServiceService {
     return this.http.get<Venture[]>(`${this.url}emprendimiento`);
   }
 
+  consultarEmprendimiento(id: number): Observable<Venture> {
+    return this.http.get<Venture>(`${this.url}emprendimiento/id/${id}`);
+  }
+
   crearEmprendimiento(emprendimiento: Venture): Observable<Venture> {
     return this.http.post<Venture>(`${this.url}emprendimiento`, emprendimiento);
   }
@@ -46,6 +50,14 @@ export class ServiceService {
 
   borrarEmprendimiento(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}emprendimiento/${id}`);
+  }
+
+  asignarUsuarioEmprendimiento(usuarioEmprendimiento: UsuarioEmprendimiento): Observable<UsuarioEmprendimiento> {
+    return this.http.post<UsuarioEmprendimiento>(`${this.url}usuarioEmprendimiento/asignar`, usuarioEmprendimiento);
+  }
+
+  asignarEmprendimientoEvento(emprendimientoEvento: EmprendimientoEvento): Observable<EmprendimientoEvento> {
+    return this.http.post<EmprendimientoEvento>(`${this.url}evento-emprendimiento/asignar`, emprendimientoEvento);
   }
 
 
