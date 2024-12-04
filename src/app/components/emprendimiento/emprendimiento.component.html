@@ -51,7 +51,7 @@
 
     <!-- Modal para crear/editar emprendimientos -->
     <div *ngIf="isModalOpen" class="modal-backdrop">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">{{ modalEditar ? 'Editar Emprendimiento' : 'Crear Emprendimiento' }}</h5>
@@ -59,74 +59,133 @@
           </div>
 
           <form #form="ngForm" (ngSubmit)="modalEditar ? editarEmprendimiento(form) : crearEmprendimiento(form)" novalidate>
+
             <div class="modal-body">
-              <div class="mb-3">
-                <label for="codigo" class="form-label">
-                  Código
-                </label>
-                <input type="text"
-                      id="codigo"
-                      class="form-control"
-                      [(ngModel)]="selectedEmprendimiento.codigo"
-                      name="codigo"
-                      required
-                      #codigo="ngModel"/>
-              </div>
+              <div class="container-fluid">
 
-              <div class="mb-3">
-                <label for="nombre" class="form-label">
-                  Nombre
-                </label>
-                <input type="text"
-                      id="nombre"
-                      class="form-control"
-                      [(ngModel)]="selectedEmprendimiento.nombre"
-                      name="nombre"
-                      required
-                      #nombre="ngModel"/>
-                  <div *ngIf="nombre.invalid  && (nombre.dirty || nombre.touched)" class="text-danger">
-                      <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio</small>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="codigo" class="form-label">
+                      Código
+                    </label>
+                    <input type="text"
+                          id="codigo"
+                          class="form-control"
+                          [(ngModel)]="selectedEmprendimiento.codigo"
+                          name="codigo"
+                          required
+                          #codigo="ngModel"/>
                   </div>
-              </div>
 
-              <div class="mb-3">
-                <label for="id_municipio" class="form-label">
-                  Municipio
-                </label>
-                <select id="id_municipio"
-                  class="form-select"
-                  [(ngModel)]="selectedEmprendimiento.id_municipio"
-                  name="id_municipio"
-                  required
-                  #id_municipio="ngModel">
-                  <option [ngValue]="null" disabled selected>Seleccione un municipio</option>
-                  <option *ngFor="let municipio of municipios" [value]="municipio.id">
-                    {{ municipio.nombre }}
-                  </option>
-                </select>
-                <div *ngIf="id_municipio.invalid && (id_municipio.dirty || id_municipio.touched)" class="text-danger">
-                  <small *ngIf="id_municipio.errors?.['required']">El municipio es obligatorio</small>
+                  <div class="col-md-6 mb-3">
+                    <label for="nombre" class="form-label">
+                      Nombre
+                    </label>
+                    <input type="text"
+                          id="nombre"
+                          class="form-control"
+                          [(ngModel)]="selectedEmprendimiento.nombre"
+                          name="nombre"
+                          required
+                          #nombre="ngModel"/>
+                      <div *ngIf="nombre.invalid  && (nombre.dirty || nombre.touched)" class="text-danger">
+                          <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio</small>
+                      </div>
+                  </div>
                 </div>
-              </div>
 
-              <div class="mb-3">
-                <label for="id_categoria" class="form-label">
-                  Categoría
-                </label>
-                <select id="id_categoria"
-                  class="form-select"
-                  [(ngModel)]="selectedEmprendimiento.id_categoria"
-                  name="id_categoria"
-                  required
-                  #id_categoria="ngModel">
-                  <option [ngValue]="null" disabled selected>Seleccione una categoría</option>
-                  <option *ngFor="let cat of categorias" [value]="cat.id">
-                    {{ cat.nombre }}
-                  </option>
-                </select>
-                <div *ngIf="id_categoria.invalid && (id_categoria.dirty || id_categoria.touched)" class="text-danger">
-                  <small *ngIf="id_categoria.errors?.['required']">La categoría es obligatoria</small>
+                <div class="row">
+
                 </div>
+
+                <div class="mb-3">
+                  <label for="id_municipio" class="form-label">
+                    Municipio
+                  </label>
+                  <select id="id_municipio"
+                    class="form-select"
+                    [(ngModel)]="selectedEmprendimiento.id_municipio"
+                    name="id_municipio"
+                    required
+                    #id_municipio="ngModel">
+                    <option [ngValue]="null" disabled selected>Seleccione un municipio</option>
+                    <option *ngFor="let municipio of municipios" [value]="municipio.id">
+                      {{ municipio.nombre }}
+                    </option>
+                  </select>
+                  <div *ngIf="id_municipio.invalid && (id_municipio.dirty || id_municipio.touched)" class="text-danger">
+                    <small *ngIf="id_municipio.errors?.['required']">El municipio es obligatorio</small>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="id_categoria" class="form-label">
+                    Categoría
+                  </label>
+                  <select id="id_categoria"
+                    class="form-select"
+                    [(ngModel)]="selectedEmprendimiento.id_categoria"
+                    name="id_categoria"
+                    required
+                    #id_categoria="ngModel">
+                    <option [ngValue]="null" disabled selected>Seleccione una categoría</option>
+                    <option *ngFor="let cat of categorias" [value]="cat.id">
+                      {{ cat.nombre }}
+                    </option>
+                  </select>
+                  <div *ngIf="id_categoria.invalid && (id_categoria.dirty || id_categoria.touched)" class="text-danger">
+                    <small *ngIf="id_categoria.errors?.['required']">La categoría es obligatoria</small>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="id_usuario" class="form-label">
+                    Usuario
+                  </label>
+                  <select id="id_usuario"
+                    class="form-select"
+                    [(ngModel)]="selectedUsuarios"
+                    name="id_usuario"
+                    required
+                    multiple
+                    #id_usuario="ngModel">
+                    <option [ngValue]="null" disabled selected>Seleccione un usuario</option>
+                    <option *ngFor="let usuario of usuarios" [value]="usuario.id">
+                      {{ usuario.nombre }}
+                    </option>
+                  </select>
+                  <div *ngIf="id_usuario.invalid && (id_usuario.dirty || id_usuario.touched)" class="text-danger">
+                    <small *ngIf="id_usuario.errors?.['required']">el usuario es obligatorio</small>
+                  </div>
+                  <div *ngIf="selectedUsuarios.length === 0" class="text-danger">
+                    <small>Debe seleccionar al menos un usuario.</small>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="id_evento" class="form-label">
+                    Evento
+                  </label>
+                  <select id="id_evento"
+                    class="form-select"
+                    [(ngModel)]="selectedEventos"
+                    name="id_evento"
+                    required
+                    multiple
+                    #id_evento="ngModel">
+                    <option [ngValue]="null" disabled selected>Seleccione un evento</option>
+                    <option *ngFor="let evento of eventos" [value]="evento.id">
+                      {{ evento.nombre }}
+                    </option>
+                  </select>
+                  <div *ngIf="id_evento.invalid && (id_evento.dirty || id_evento.touched)" class="text-danger">
+                    <small *ngIf="id_evento.errors?.['required']">el evento es obligatorio</small>
+                  </div>
+                  <div *ngIf="selectedEventos.length === 0" class="text-danger">
+                    <small>Debe seleccionar al menos un evento.</small>
+                  </div>
+                </div>
+
               </div>
 
             </div>
